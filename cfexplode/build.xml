@@ -1,0 +1,36 @@
+<project name="cfexplode" default="default" basedir=".">
+    <property name="build.dir" value="build" />
+    <!-- <property name="bcel.dir" value="." /> -->
+    <property name="src.dir" value="src" />
+
+    <target name="default" depends="compile, build-jar" />
+
+    <target name="compile">
+        <sequential>
+            <mkdir dir="${build.dir}" />
+            <javac srcdir="${src.dir}" destdir="${build.dir}" debug="on">
+                <compilerarg value="-Xlint" />
+                <!--
+                <classpath>
+                    <pathelement path="${classpath}" />
+                    <fileset dir="${bcel.dir}" includes="bcel.jar" />
+                </classpath>
+                -->
+            </javac>
+        </sequential>
+    </target>
+
+    <target name="build-jar">
+        <jar destfile="cfexplode.jar" filesetmanifest="mergewithoutmain">
+        <!--
+            <zipfileset src="bcel.jar" includes="**/*.java **/*.class" />
+        -->
+            <fileset dir="${build.dir}" includes="**/*class" />
+            <fileset dir="." includes="${src.dir}/**/*" />
+            <fileset dir="." includes="build.xml" />
+            <manifest>
+                <attribute name="Main-Class" value="com.veracode.research.cfexplode" />
+            </manifest>
+        </jar>
+    </target>
+</project>
